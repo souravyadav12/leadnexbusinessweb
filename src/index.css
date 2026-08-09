@@ -1,0 +1,243 @@
+@import "tailwindcss";
+@import "@fontsource-variable/inter";
+@import "@fontsource/instrument-serif";
+
+@theme {
+  /* Professional graphite system — restrained, single accent */
+  --color-bg-primary: #0A0A0D;
+  --color-bg-secondary: #0E0E12;
+  --color-bg-card: #131318;
+  --color-bg-elevated: #191920;
+  --color-border-subtle: rgba(255, 255, 255, 0.07);
+  --color-border-strong: rgba(255, 255, 255, 0.13);
+  --color-text-primary: #EDEDF0;
+  --color-text-secondary: #93939D;
+  --color-text-tertiary: #85858F;
+  --color-accent: #5B7CFA;
+  --color-accent-secondary: #8F98A8;
+  --color-success: #3FBE81;
+  --color-danger: #E5686A;
+  --color-warning: #D9A548;
+  --font-family-sans: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  /* Corner-radius scale — one source of truth so cards, buttons, inputs,
+     and panels never drift into slightly-different roundedness. */
+  --radius-xs: 0.5rem;
+  --radius-sm: 0.75rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+
+  /* Shadow scale — matches the elevation language used across cards,
+     buttons, and floating panels instead of one-off rgba() values. */
+  --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.35);
+  --shadow-elevated: 0 12px 40px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --shadow-glow-accent: 0 8px 30px rgba(91, 124, 250, 0.35);
+  --shadow-glow-accent-lg: 0 20px 60px rgba(91, 124, 250, 0.25);
+
+  /* Easing scale — the exact curves used throughout motion/config.js,
+     exposed as CSS so raw-CSS transitions (hover states, focus rings)
+     move with the same character as the framer-motion animations. */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+section[id] {
+  scroll-margin-top: 96px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  background-color: #0A0A0D;
+  color: #EDEDF0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  font-feature-settings: 'ss01' 1, 'cv01' 1;
+  letter-spacing: -0.01em;
+}
+
+::selection {
+  background-color: rgba(91, 124, 250, 0.28);
+  color: #F5F5F7;
+}
+
+/* ---------------- Focus & keyboard navigation ---------------- */
+/* One consistent focus treatment for every interactive element on the
+   site — links, buttons, toggles, accordion triggers — so keyboard users
+   always get the same clear, on-brand ring instead of the browser default
+   (or worse, nothing, on custom-styled controls). */
+*:focus {
+  outline: none;
+}
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible,
+[role='switch']:focus-visible,
+[role='button']:focus-visible {
+  outline: 2px solid rgba(91, 124, 250, 0.7);
+  outline-offset: 3px;
+  border-radius: var(--radius-xs);
+  transition: outline-color 0.15s var(--ease-out);
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #0A0A0D; }
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 4px;
+  border: 2px solid #0A0A0D;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(91, 124, 250, 0.45); }
+* { scrollbar-color: rgba(255, 255, 255, 0.14) transparent; scrollbar-width: thin; }
+
+/* ---------------- Motion ---------------- */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(0.3deg); }
+}
+@keyframes waveform {
+  0%, 100% { height: 8px; }
+  50% { height: 28px; }
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-float { animation: float 7s ease-in-out infinite; }
+.animate-marquee { animation: marquee 32s linear infinite; }
+
+/* ---------------- Surfaces ---------------- */
+.glass {
+  background: rgba(15, 15, 18, 0.55);
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-strong {
+  background: rgba(8, 8, 10, 0.75);
+  backdrop-filter: blur(32px) saturate(140%);
+  -webkit-backdrop-filter: blur(32px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.gradient-text {
+  color: var(--color-accent);
+}
+
+.gradient-border { position: relative; }
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(91, 124, 250, 0.22), rgba(139, 140, 246, 0.2));
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  pointer-events: none;
+}
+
+.glow-accent { box-shadow: 0 8px 30px rgba(0,0,0,0.35); }
+.glow-accent-hover:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.06); }
+
+.section-padding {
+  padding-left: max(1.5rem, calc((100vw - 1280px) / 2));
+  padding-right: max(1.5rem, calc((100vw - 1280px) / 2));
+}
+
+/* Editorial heading rhythm */
+.text-display {
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+}
+
+.text-mono-label {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* Editorial serif accent — used sparingly on numerals, kickers, pull-quotes
+   to break the all-grotesk monotone that reads as "generic SaaS template". */
+.font-editorial {
+  font-family: 'Instrument Serif', ui-serif, Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+/* Large ghost numerals used as compositional anchors instead of icon-in-a-box */
+.numeral-ghost {
+  font-family: 'Instrument Serif', ui-serif, Georgia, serif;
+  font-style: italic;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.14);
+  line-height: 0.8;
+}
+
+/* Hairline tag — replaces the pill/badge shape everywhere */
+.tag-bracket {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  position: relative;
+  padding: 0 0.15em;
+}
+.tag-bracket::before,
+.tag-bracket::after {
+  color: var(--color-text-tertiary);
+  opacity: 0.7;
+}
+.tag-bracket::before { content: '['; margin-right: 0.35em; }
+.tag-bracket::after { content: ']'; margin-left: 0.35em; }
+
+@keyframes ripple {
+  from { opacity: 0.5; transform: scale(0); }
+  to { opacity: 0; transform: scale(1); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.animate-spin-loading { animation: spin 0.7s linear infinite; }
+
+@media (pointer: fine) {
+  [data-cursor] { cursor: pointer; }
+}
+
+/* Raw CSS keyframe utilities (.animate-float, .animate-marquee, etc.) run
+   outside framer-motion, so MotionConfig's reducedMotion="user" never
+   touches them. This was a real gap — a user with reduced-motion enabled
+   still saw floating badges and infinite marquees. Closed here, globally,
+   in a single consolidated rule (was previously split across two blocks). */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  html {
+    scroll-behavior: auto !important;
+  }
+}
