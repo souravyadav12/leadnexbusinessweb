@@ -54,7 +54,7 @@ const standards = [
 
 export default function ComplianceGrid() {
   return (
-    <div className="max-w-4xl">
+    <div className="max-w-7xl mx-auto">
       {standards.map((s, i) => (
         <SecurityCard key={s.title} {...s} index={i} />
       ))}

@@ -78,24 +78,24 @@ export default function Footer() {
       <Background preset="minimal" />
 
       {/* Editorial masthead line */}
-      <div className="section-padding relative pt-16 lg:pt-20">
+      <div className="section-padding relative pt-12 sm:pt-16 lg:pt-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 0.6 }}
-          className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 pb-14 border-b border-white/[0.06]"
+          className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 sm:gap-8 pb-10 sm:pb-14 border-b border-white/[0.06]"
         >
           <div>
             <span className="text-mono-label text-[10px] text-accent">LeadNex AI · Est. 2023</span>
-            <h2 className="text-display text-3xl sm:text-4xl lg:text-5xl text-white mt-3 max-w-xl">
+            <h2 className="text-display text-2xl sm:text-4xl lg:text-5xl text-white mt-2 sm:mt-3 max-w-xl">
               Let's put your calls <span className="gradient-text">on autopilot.</span>
             </h2>
           </div>
           <a
             href="#pricing"
             data-cursor="link"
-            className="group inline-flex items-center gap-2 self-start lg:self-auto text-white text-sm font-semibold border-b border-white/20 pb-1 hover:border-accent transition-colors"
+            className="group inline-flex items-center gap-2 self-start lg:self-auto text-white text-xs sm:text-sm font-semibold border-b border-white/20 pb-1 hover:border-accent transition-colors"
           >
             Start your free trial
             <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -103,20 +103,20 @@ export default function Footer() {
         </motion.div>
       </div>
 
-      <div className="section-padding py-14 lg:py-16 relative">
+      <div className="section-padding py-10 sm:py-14 lg:py-16 relative">
         {/* Top grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 lg:gap-12">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-8 lg:gap-12">
           {/* Brand col */}
-          <div className="col-span-2">
+          <div className="col-span-2 sm:col-span-3 lg:col-span-2">
             <a href="#hero" className="flex items-center gap-2 mb-4" aria-label="LeadNex AI — back to top">
-              <div className="w-9 h-9 rounded-full bg-accent flex items-center justify-center shadow-lg shadow-accent/20">
-                <Zap className="w-5 h-5 text-white" />
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-accent flex items-center justify-center shadow-lg shadow-accent/20">
+                <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
-              <span className="text-xl font-semibold text-white tracking-tight">
+              <span className="text-lg sm:text-xl font-semibold text-white tracking-tight">
                 LeadNex<span className="text-accent">.Ai</span>
               </span>
             </a>
-            <p className="text-text-secondary text-sm mb-6 max-w-xs">
+            <p className="text-text-secondary text-xs sm:text-sm mb-5 sm:mb-6 max-w-xs leading-relaxed">
               Enterprise AI calling agents that handle millions of conversations with human-like precision.
             </p>
             {/* Newsletter */}
@@ -126,7 +126,7 @@ export default function Footer() {
                   key="success"
                   initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="flex items-center gap-2 text-sm text-success"
+                  className="flex items-center gap-2 text-xs sm:text-sm text-success"
                   role="status"
                   aria-live="polite"
                 >
@@ -137,7 +137,7 @@ export default function Footer() {
                   key="form"
                   onSubmit={handleSubscribe}
                   noValidate
-                  className="flex gap-2"
+                  className="flex flex-col sm:flex-row gap-2 max-w-sm"
                 >
                   <div className="flex-1">
                     <input
@@ -147,17 +147,17 @@ export default function Footer() {
                       placeholder="Enter your email"
                       aria-label="Email for newsletter"
                       aria-invalid={error || undefined}
-                      className={`w-full px-4 py-2.5 bg-bg-card border rounded-xl text-sm text-white placeholder:text-text-secondary focus:outline-none transition-colors ${
+                      className={`w-full px-3.5 py-2 sm:py-2.5 bg-bg-card border rounded-xl text-xs sm:text-sm text-white placeholder:text-text-secondary focus:outline-none transition-colors ${
                         error ? 'border-danger/60 focus:border-danger' : 'border-white/10 focus:border-accent/50'
                       }`}
                     />
                     {error && (
-                      <p className="text-xs text-danger mt-1.5">Enter a valid email address.</p>
+                      <p className="text-[11px] text-danger mt-1">Enter a valid email address.</p>
                     )}
                   </div>
                   <button
                     type="submit"
-                    className="px-4 py-2.5 bg-gradient-to-r from-accent to-accent-secondary text-white text-sm font-semibold rounded-xl hover:shadow-lg hover:shadow-accent/20 transition-all cursor-pointer shrink-0 self-start"
+                    className="px-4 py-2 sm:py-2.5 bg-gradient-to-r from-accent to-accent-secondary text-white text-xs sm:text-sm font-semibold rounded-xl hover:shadow-lg hover:shadow-accent/20 transition-all cursor-pointer shrink-0"
                   >
                     Subscribe
                   </button>
@@ -165,17 +165,17 @@ export default function Footer() {
               )}
             </AnimatePresence>
             {/* Socials */}
-            <div className="flex gap-3 mt-6">
+            <div className="flex gap-2.5 sm:gap-3 mt-5 sm:mt-6">
               {socialIcons.map(({ Icon, label }) => (
                 <a
                   key={label}
                   href="https://twitter.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-text-secondary hover:text-white hover:bg-white/10 hover:border-white/20 transition-all"
+                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-text-secondary hover:text-white hover:bg-white/10 hover:border-white/20 transition-all"
                   aria-label={label}
                 >
-                  <Icon className="w-4 h-4" />
+                  <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </a>
               ))}
             </div>
@@ -184,19 +184,19 @@ export default function Footer() {
           {/* Link columns */}
           {footerLinks.map((col) => (
             <div key={col.title}>
-              <h4 className="text-mono-label text-[10px] text-text-tertiary mb-4">{col.title}</h4>
-              <ul className="space-y-2.5">
+              <h4 className="text-mono-label text-[10px] text-text-tertiary mb-3 sm:mb-4">{col.title}</h4>
+              <ul className="space-y-2 sm:space-y-2.5">
                 {col.links.map(({ label, href }) => (
                   <li key={label}>
                     {href ? (
                       <a
                         href={href}
-                        className="text-sm text-text-secondary hover:text-white transition-colors"
+                        className="text-xs sm:text-sm text-text-secondary hover:text-white transition-colors"
                       >
                         {label}
                       </a>
                     ) : (
-                      <span className="text-sm text-text-secondary/40 cursor-default select-none">
+                      <span className="text-xs sm:text-sm text-text-secondary/40 cursor-default select-none">
                         {label}
                       </span>
                     )}
@@ -208,14 +208,14 @@ export default function Footer() {
         </div>
 
         {/* Bottom */}
-        <div className="mt-16 pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-text-secondary text-sm">
+        <div className="mt-12 sm:mt-16 pt-6 sm:pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+          <p className="text-text-secondary text-xs sm:text-sm">
             © {new Date().getFullYear()} LeadNex AI, Inc. All rights reserved.
           </p>
-          <div className="flex gap-6">
-            <span className="text-sm text-text-secondary/40 cursor-default select-none">Privacy Policy</span>
-            <span className="text-sm text-text-secondary/40 cursor-default select-none">Terms of Service</span>
-            <span className="text-sm text-text-secondary/40 cursor-default select-none">Cookie Policy</span>
+          <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
+            <span className="text-xs sm:text-sm text-text-secondary/40 cursor-default select-none">Privacy Policy</span>
+            <span className="text-xs sm:text-sm text-text-secondary/40 cursor-default select-none">Terms of Service</span>
+            <span className="text-xs sm:text-sm text-text-secondary/40 cursor-default select-none">Cookie Policy</span>
           </div>
         </div>
       </div>

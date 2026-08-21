@@ -22,7 +22,7 @@ const comparisons = [
  */
 export default function USPSection() {
   return (
-    <div className="mt-20 lg:mt-28 max-w-5xl mx-auto">
+    <div className="mt-20 lg:mt-28 max-w-7xl mx-auto">
       <div className="flex items-baseline justify-between mb-8 gap-6">
         <span className="tag-bracket text-[11px] text-accent">Why LeadNex AI</span>
         <div className="flex items-center gap-6 text-[11px] text-mono-label">

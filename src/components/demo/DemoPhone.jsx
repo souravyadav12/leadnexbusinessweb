@@ -60,12 +60,12 @@ export default function DemoPhone() {
       className="w-full max-w-md mx-auto"
     >
       {/* Scenario tabs */}
-      <div className="flex flex-wrap gap-2 mb-4 justify-center">
+      <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-4 justify-center">
         {scenarioKeys.map((key) => (
           <button
             key={key}
             onClick={() => switchScenario(key)}
-            className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all cursor-pointer ${
+            className={`px-2.5 sm:px-3 py-1.5 text-[11px] sm:text-xs font-medium rounded-lg transition-all cursor-pointer ${
               activeScenario === key
                 ? 'bg-accent text-white'
                 : 'bg-white/5 text-text-secondary hover:text-white hover:bg-white/10'
@@ -77,12 +77,12 @@ export default function DemoPhone() {
       </div>
 
       {/* Phone UI */}
-      <div className="glass rounded-3xl overflow-hidden">
+      <div className="glass rounded-2xl sm:rounded-3xl overflow-hidden">
         {/* Top bar */}
-        <div className="px-6 py-4 border-b border-white/[0.06] flex items-center justify-between">
+        <div className="px-4 sm:px-6 py-3.5 sm:py-4 border-b border-white/[0.06] flex items-center justify-between">
           <div>
-            <div className="text-sm font-semibold text-white">{scenario.title}</div>
-            <div className="text-xs text-text-secondary flex items-center gap-1.5">
+            <div className="text-xs sm:text-sm font-semibold text-white">{scenario.title}</div>
+            <div className="text-[10px] sm:text-xs text-text-secondary flex items-center gap-1.5">
               {sim.status === 'idle' && 'Ready to start'}
               {sim.status === 'live' && (
                 <>
@@ -92,11 +92,11 @@ export default function DemoPhone() {
               {sim.status === 'ended' && 'Call ended'}
             </div>
           </div>
-          <div className={`w-3 h-3 rounded-full ${isLive ? 'bg-success animate-pulse' : 'bg-text-secondary/30'}`} />
+          <div className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full ${isLive ? 'bg-success animate-pulse' : 'bg-text-secondary/30'}`} />
         </div>
 
         {/* Content */}
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           {/* Waveform */}
           <div className="mb-4">
             <DemoWaveform active={isLive && !sim.isThinking} />
@@ -112,38 +112,38 @@ export default function DemoPhone() {
         </div>
 
         {/* Controls */}
-        <div className="px-6 py-4 border-t border-white/[0.06] flex items-center justify-center gap-4">
+        <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-white/[0.06] flex items-center justify-center gap-3 sm:gap-4">
           <button
             onClick={() => setIsMuted(!isMuted)}
-            className={`w-12 h-12 rounded-full flex items-center justify-center transition-all cursor-pointer ${
+            className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all cursor-pointer shrink-0 ${
               isMuted ? 'bg-danger/20 text-danger' : 'bg-white/5 text-text-secondary hover:bg-white/10'
             }`}
             aria-label={isMuted ? 'Unmute' : 'Mute'}
           >
-            {isMuted ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+            {isMuted ? <MicOff className="w-4 h-4 sm:w-5 sm:h-5" /> : <Mic className="w-4 h-4 sm:w-5 sm:h-5" />}
           </button>
 
           {!isLive ? (
             <button
               onClick={startCall}
-              className="w-14 h-14 rounded-full bg-gradient-to-r from-accent to-accent-secondary flex items-center justify-center text-white hover:shadow-lg hover:shadow-accent/30 transition-all cursor-pointer"
+              className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-r from-accent to-accent-secondary flex items-center justify-center text-white hover:shadow-lg hover:shadow-accent/30 transition-all cursor-pointer shrink-0"
               aria-label="Start call"
             >
-              <Phone className="w-6 h-6" />
+              <Phone className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
           ) : (
             <button
               onClick={sim.end}
-              className="w-14 h-14 rounded-full bg-danger flex items-center justify-center text-white hover:bg-danger/80 transition-all cursor-pointer"
+              className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-danger flex items-center justify-center text-white hover:bg-danger/80 transition-all cursor-pointer shrink-0"
               aria-label="End call"
             >
-              <PhoneOff className="w-6 h-6" />
+              <PhoneOff className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
           )}
 
           <button
             onClick={sim.reset}
-            className="px-4 h-12 rounded-full bg-white/5 text-text-secondary text-xs font-medium flex items-center justify-center hover:bg-white/10 hover:text-white transition-all cursor-pointer"
+            className="px-3.5 sm:px-4 h-10 sm:h-12 rounded-full bg-white/5 text-text-secondary text-xs font-medium flex items-center justify-center hover:bg-white/10 hover:text-white transition-all cursor-pointer shrink-0"
           >
             Reset
           </button>

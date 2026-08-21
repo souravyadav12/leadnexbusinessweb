@@ -126,7 +126,7 @@ export default function Pricing() {
         </motion.div>
 
         {/* Cards */}
-        <div className="grid md:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto">
           {plans.map((plan, i) => (
             <PricingCard key={plan.name} {...plan} index={i} yearly={yearly} />
           ))}

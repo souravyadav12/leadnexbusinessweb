@@ -33,7 +33,7 @@ export default function FAQ() {
   const [open, setOpen] = useState(null);
 
   return (
-    <div className="mt-20 max-w-3xl mx-auto">
+    <div className="mt-20 max-w-4xl mx-auto">
       <h3 className="text-2xl font-bold text-white text-center mb-8">Frequently Asked Questions</h3>
       <div className="space-y-3">
         {faqs.map((faq, i) => (

@@ -52,19 +52,11 @@ export default function LiveWaveform({ label = 'Tap to talk' }) {
 
   useEffect(() => () => stopListening(), []);
 
-  // Idle ambient animation when not actively listening to a real mic
-  useEffect(() => {
-    if (listening) return;
-    const id = setInterval(() => {
-      setLevels((prev) => prev.map((_, i) => 6 + Math.abs(Math.sin(Date.now() / 400 + i)) * 14));
-    }, 90);
-    return () => clearInterval(id);
-  }, [listening]);
-
   return (
     <div className="flex flex-col items-center gap-3">
       <Waveform
-        levels={levels}
+        levels={listening ? levels : undefined}
+        active={true}
         barWidth={3}
         gap={3}
         maxHeight={36}

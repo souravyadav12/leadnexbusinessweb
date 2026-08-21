@@ -1,12 +1,6 @@
 import { motion } from 'framer-motion';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 
-/**
- * One or two radial "light pools" that drift along a slow, wide loop —
- * independent of the pointer (see MouseReactiveLighting for the
- * pointer-driven variant). Gives a section a sense of an unseen light
- * source moving overhead.
- */
 export default function MovingSpotlights({ count = 2, color = 'rgba(91,124,250,0.06)', size = 600 }) {
   const reducedMotion = useReducedMotion();
 
@@ -18,11 +12,11 @@ export default function MovingSpotlights({ count = 2, color = 'rgba(91,124,250,0
   }));
 
   return (
-    <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
+    <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
       {spots.map((s, i) => (
         <motion.div
           key={i}
-          className="absolute rounded-full blur-[130px]"
+          className="absolute rounded-full"
           style={{
             width: size,
             height: size,

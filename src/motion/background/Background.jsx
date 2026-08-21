@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { BACKGROUND_PRESETS } from './presets';
 import GradientMesh from './layers/GradientMesh';
 import Aurora from './layers/Aurora';
@@ -11,10 +11,8 @@ import ParticleDrift from './layers/ParticleDrift';
 import GlassShimmer from './layers/GlassShimmer';
 import BeamLights from './layers/BeamLights';
 import DepthLighting from './layers/DepthLighting';
+import { fpsMonitor } from '../../utils/FPSMonitor';
 
-// Maps a layer key (used in presets.js) to its component + how it's rendered.
-// Layers that need the section's own container ref (for scroll-parallax)
-// are marked `needsContainer`.
 const LAYER_MAP = {
   gradientMesh: { Component: GradientMesh, needsContainer: false },
   aurora: { Component: Aurora, needsContainer: false },
@@ -34,28 +32,44 @@ const TINT_COLORS = {
   secondary: 'rgba(143,152,168,0.05)',
 };
 
-/**
- * The reusable background engine. Drop it as the first child of any
- * `relative` section and it fills it with a composed, layered, subtle,
- * living backdrop — no section hand-rolls its own blurred divs anymore.
- *
- * Usage:
- *   <section className="relative ...">
- *     <Background preset="section" />
- *     <div className="relative section-padding">...</div>
- *   </section>
- *
- * Or compose custom layers directly:
- *   <Background layers={['gradientMesh', 'beams', 'depth']} tint="secondary" />
- *
- * All layers self-disable/simplify under prefers-reduced-motion; parallax
- * (via BlurLayers) automatically scopes scroll tracking to this section's
- * own bounds so it never fights with other sections' scroll math.
- */
 export default function Background({ preset = 'section', layers, tint, parallax = true, className = '', layerProps = {} }) {
   const containerRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lowPower, setLowPower] = useState(false);
+
+  useEffect(() => {
+    const unsub = fpsMonitor.subscribe((fps, isLowPower) => {
+      setLowPower(isLowPower);
+    });
+    return unsub;
+  }, []);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsVisible(entry.isIntersecting);
+        });
+      },
+      { rootMargin: '300px' }
+    );
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  if (!isVisible) {
+    return <div ref={containerRef} className="absolute inset-0 pointer-events-none" aria-hidden="true" />;
+  }
+
   const config = preset ? BACKGROUND_PRESETS[preset] ?? BACKGROUND_PRESETS.section : { layers: [], tint: 'accent' };
-  const activeLayers = layers ?? config.layers;
+  let activeLayers = layers ?? config.layers;
+
+  // Graceful degradation when low power / dropped frames detected
+  if (lowPower) {
+    activeLayers = activeLayers.filter((key) => key !== 'particles' && key !== 'aurora' && key !== 'spotlights');
+  }
+
   const activeTint = tint ?? config.tint ?? 'accent';
   const blurTint = TINT_COLORS[activeTint] ?? TINT_COLORS.accent;
 

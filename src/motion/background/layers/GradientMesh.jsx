@@ -7,11 +7,6 @@ const TINTS = {
   warm: ['rgba(250,170,91,0.08)', 'rgba(91,124,250,0.06)', 'rgba(250,120,120,0.05)'],
 };
 
-/**
- * Two or three large, very softly blurred color blobs that drift slowly.
- * This is the "base atmosphere" of a section — every other layer sits on
- * top of it. Kept to low opacity so it reads as ambient color, not shapes.
- */
 export default function GradientMesh({ tint = 'accent', className = '' }) {
   const reducedMotion = useReducedMotion();
   const colors = TINTS[tint] ?? TINTS.accent;
@@ -23,11 +18,11 @@ export default function GradientMesh({ tint = 'accent', className = '' }) {
   ];
 
   return (
-    <div className={`absolute inset-0 ${className}`} aria-hidden="true">
+    <div className={`absolute inset-0 pointer-events-none ${className}`} aria-hidden="true">
       {blobs.map((b, i) => (
         <motion.div
           key={i}
-          className="absolute rounded-full blur-[110px]"
+          className="absolute rounded-full"
           style={{
             top: b.top,
             left: b.left,
@@ -35,12 +30,12 @@ export default function GradientMesh({ tint = 'accent', className = '' }) {
             bottom: b.bottom,
             width: b.size,
             height: b.size,
-            background: b.color,
+            background: `radial-gradient(circle, ${b.color} 0%, transparent 70%)`,
           }}
           animate={
             reducedMotion
               ? undefined
-              : { scale: [1, 1.12, 1], opacity: [0.85, 1, 0.85] }
+              : { scale: [1, 1.1, 1], opacity: [0.85, 1, 0.85] }
           }
           transition={{ duration: b.duration, repeat: Infinity, ease: 'easeInOut', delay: i * 1.5 }}
         />

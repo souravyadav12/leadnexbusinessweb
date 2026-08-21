@@ -19,7 +19,7 @@ export default function TryYourself() {
           subtitle="Book a personalized demo or start your free trial. No credit card required. Setup takes less than 5 minutes."
         />
 
-        <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-start max-w-6xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-start max-w-7xl mx-auto">
           <BookDemo />
           <LeadForm />
         </div>
