@@ -1,37 +1,67 @@
 import { useEffect, useState, useRef } from 'react';
 
-export function useScrollSpy(ids, { rootMargin = '-40% 0px -50% 0px' } = {}) {
-  const [activeId, setActiveId] = useState(ids[0]);
-  const rafRef = useRef(null);
+/**
+ * High-performance Scroll-spy hook that tracks which section is currently active.
+ * Uses IntersectionObserver to completely avoid layout thrashing / reflows on scroll,
+ * and only calculates bounding rects inside the observer callback when a transition occurs.
+ *
+ * @param {string[]} ids - Section element IDs to observe
+ * @param {number} offset - Pixels from top to treat as the threshold (navbar height)
+ */
+export function useScrollSpy(ids, offset = 96) {
+  const [activeId, setActiveId] = useState(null);
+  const idsRef = useRef(ids);
+  idsRef.current = ids;
 
   useEffect(() => {
-    const elements = ids
-      .map((id) => document.getElementById(id))
-      .filter(Boolean);
+    const observedElements = new Map();
 
-    if (elements.length === 0) return;
+    const observerOptions = {
+      root: null, // viewport
+      // Trigger when element crosses the navbar height zone down to 75% of viewport
+      rootMargin: `-${offset}px 0px -75% 0px`,
+      threshold: 0,
+    };
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (rafRef.current) return;
-        rafRef.current = requestAnimationFrame(() => {
-          rafRef.current = null;
-          const visible = entries.filter((e) => e.isIntersecting);
-          if (visible.length > 0) {
-            const top = visible.reduce((a, b) => (a.intersectionRatio > b.intersectionRatio ? a : b));
-            setActiveId(top.target.id);
-          }
-        });
-      },
-      { rootMargin, threshold: [0.1, 0.5, 0.9] }
-    );
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        observedElements.set(entry.target.id, entry.isIntersecting);
+      });
 
-    elements.forEach((el) => observer.observe(el));
+      // Get all currently intersecting elements
+      const intersectingIds = idsRef.current.filter((id) => observedElements.get(id));
+
+      if (intersectingIds.length === 0) return;
+
+      // Find the one closest to the top of the viewport (closest to the offset)
+      let closestId = intersectingIds[0];
+      let minDistance = Infinity;
+
+      intersectingIds.forEach((id) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        // Distance of the element's top to the navbar threshold
+        const distance = Math.abs(rect.top - offset);
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestId = id;
+        }
+      });
+
+      setActiveId(closestId);
+    }, observerOptions);
+
+    // Start observing existing elements
+    idsRef.current.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
     return () => {
       observer.disconnect();
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [ids.join(','), rootMargin]);
+  }, [ids.join(','), offset]);
 
   return activeId;
 }

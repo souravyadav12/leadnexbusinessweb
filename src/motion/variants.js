@@ -8,13 +8,13 @@ import { SPRING, EASE, DURATION, stagger } from './config';
 // ─────────────────────────────────────────────────────────────────────────
 
 export const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
-  show: { opacity: 1, y: 0, transition: { ...SPRING.default, opacity: { duration: DURATION.slow, ease: EASE.out } } },
+  hidden: { opacity: 0, y: 18 },
+  show: { opacity: 1, y: 0, transition: { duration: DURATION.slow, ease: EASE.out } },
 };
 
 export const fadeDown = {
-  hidden: { opacity: 0, y: -24 },
-  show: { opacity: 1, y: 0, transition: { ...SPRING.default, opacity: { duration: DURATION.slow, ease: EASE.out } } },
+  hidden: { opacity: 0, y: -18 },
+  show: { opacity: 1, y: 0, transition: { duration: DURATION.slow, ease: EASE.out } },
 };
 
 export const fadeIn = {
@@ -23,7 +23,7 @@ export const fadeIn = {
 };
 
 export const blurReveal = {
-  hidden: { opacity: 0, filter: 'blur(14px)', y: 16 },
+  hidden: { opacity: 0, filter: 'blur(10px)', y: 14 },
   show: {
     opacity: 1,
     filter: 'blur(0px)',
@@ -33,46 +33,63 @@ export const blurReveal = {
 };
 
 export const scaleReveal = {
-  hidden: { opacity: 0, scale: 0.9 },
-  show: { opacity: 1, scale: 1, transition: SPRING.default },
+  hidden: { opacity: 0, scale: 0.985 },
+  show: { opacity: 1, scale: 1, transition: { duration: DURATION.base, ease: EASE.out } },
 };
 
-/** Wipe reveal via clip-path — used for image/media panels, underlines, dividers. */
 export const maskReveal = {
   hidden: { clipPath: 'inset(0 0 100% 0)', opacity: 0.4 },
-  show: { clipPath: 'inset(0 0 0% 0)', opacity: 1, transition: { duration: DURATION.slower, ease: EASE.out } },
+  show: { clipPath: 'inset(0 0 0% 0)', opacity: 1, transition: { duration: DURATION.slow, ease: EASE.out } },
 };
 
 export const maskRevealX = {
   hidden: { clipPath: 'inset(0 100% 0 0)', opacity: 0.4 },
-  show: { clipPath: 'inset(0 0% 0 0)', opacity: 1, transition: { duration: DURATION.slower, ease: EASE.out } },
+  show: { clipPath: 'inset(0 0% 0 0)', opacity: 1, transition: { duration: DURATION.slow, ease: EASE.out } },
 };
 
 export const slideReveal = {
-  hidden: { opacity: 0, x: -32 },
-  show: { opacity: 1, x: 0, transition: SPRING.default },
+  hidden: { opacity: 0, x: -20 },
+  show: { opacity: 1, x: 0, transition: { duration: DURATION.slow, ease: EASE.out } },
 };
 
 export const slideRevealRight = {
-  hidden: { opacity: 0, x: 32 },
-  show: { opacity: 1, x: 0, transition: SPRING.default },
+  hidden: { opacity: 0, x: 20 },
+  show: { opacity: 1, x: 0, transition: { duration: DURATION.slow, ease: EASE.out } },
 };
 
-/** Per-character / per-word reveal step, used inside TextReveal's stagger container. */
 export const textUnitReveal = {
-  hidden: { y: '110%', opacity: 0 },
-  show: { y: '0%', opacity: 1, transition: { duration: 0.65, ease: EASE.out } },
+  hidden: { y: '100%', opacity: 0 },
+  show: { y: '0%', opacity: 1, transition: { duration: DURATION.slow, ease: EASE.out } },
+};
+
+// ─── Newly Requested Fast Animation Variants ───
+export const revealUp = {
+  hidden: { opacity: 0, y: 18 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.42, ease: [0.16, 1, 0.3, 1] } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.42, ease: [0.16, 1, 0.3, 1] } },
+};
+
+export const cardReveal = {
+  hidden: { opacity: 0, y: 14, scale: 0.985 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.38, ease: [0.16, 1, 0.3, 1] } },
+  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.38, ease: [0.16, 1, 0.3, 1] } },
+};
+
+export const fastContainer = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.07, delayChildren: 0.03 } },
+  show: { transition: { staggerChildren: 0.07, delayChildren: 0.03 } },
+};
+
+export const smallStaggerContainer = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.05, delayChildren: 0.02 } },
+  show: { transition: { staggerChildren: 0.05, delayChildren: 0.02 } },
 };
 
 export const staggerContainer = stagger;
 export { stagger };
 
-/**
- * Returns a copy of a hidden/show variant pair with `delay` merged into the
- * "show" transition. Used by reveal components instead of passing a
- * component-level `transition` prop, which would otherwise clobber the
- * variant's own spring/easing config rather than extending it.
- */
 export function withDelay(variant, delay = 0) {
   if (!delay) return variant;
   return {
@@ -81,22 +98,24 @@ export function withDelay(variant, delay = 0) {
       ...variant.show,
       transition: { ...variant.show.transition, delay },
     },
+    visible: {
+      ...variant.visible,
+      transition: { ...variant.visible?.transition, delay },
+    }
   };
 }
 
-/** A whole <section> entering the viewport — fadeUp + child stagger combined. */
 export const sectionTransition = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, y: 24 },
   show: {
     opacity: 1,
     y: 0,
-    transition: { ...SPRING.soft, when: 'beforeChildren', staggerChildren: 0.08 },
+    transition: { duration: DURATION.slower, ease: EASE.out, when: 'beforeChildren', staggerChildren: 0.06 },
   },
 };
 
-/** Whole-page enter/exit, for use with AnimatePresence at the route/app root. */
 export const pageTransition = {
-  initial: { opacity: 0, y: 12, filter: 'blur(6px)' },
+  initial: { opacity: 0, y: 8, filter: 'blur(4px)' },
   animate: {
     opacity: 1,
     y: 0,
@@ -105,8 +124,8 @@ export const pageTransition = {
   },
   exit: {
     opacity: 0,
-    y: -8,
-    filter: 'blur(6px)',
+    y: -6,
+    filter: 'blur(4px)',
     transition: { duration: DURATION.fast, ease: EASE.inOut },
   },
 };

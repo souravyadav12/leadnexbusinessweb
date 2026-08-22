@@ -1,3 +1,5 @@
+import React from 'react';
+import { motion } from 'framer-motion';
 import SectionTitle from '../common/SectionTitle';
 import TestimonialCard from './TestimonialCard';
 import LogoCloud from './LogoCloud';
@@ -53,7 +55,7 @@ const testimonials = [
     name: 'Priya Sharma',
     role: 'COO',
     company: 'Pinnacle',
-    quote: 'The multi-language support is incredible. We serve customers in 12 languages across 30 countries, all with the same AI agent. Localization that would have taken months, done in hours.',
+    quote: 'The multi-language support is incredible. We serve customers in 12 languages across 30 countries, all with the same AI agent.',
     metric: '12',
     metricLabel: 'Languages supported seamlessly',
     rating: 5,
@@ -62,29 +64,40 @@ const testimonials = [
 
 export default function Testimonials() {
   return (
-    <section id="testimonials" className="py-20 lg:py-24 relative" aria-label="Testimonials">
+    <section id="testimonials" className="py-20 lg:py-28 relative" aria-label="Testimonials">
       <Background preset="section" />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent pointer-events-none" aria-hidden="true" />
+      <div className="absolute top-1/2 left-1/4 w-[400px] h-[300px] bg-purple-600/5 blur-[120px] rounded-full pointer-events-none" />
 
       <div className="section-padding relative">
         <SectionTitle
           index="04"
           badge="Testimonials"
-          flip
           title="Loved by Teams"
           titleAccent="Worldwide"
           subtitle="See how leading companies are transforming their operations with AI-powered calling agents."
         />
 
-        {/* Bento: first card spans wide as the featured quote, rest fill the grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 auto-rows-[minmax(220px,auto)] gap-6">
-          {testimonials.map((t, i) => (
+        {/* Primary 3-card row — most impactful testimonials */}
+        <div className="grid md:grid-cols-3 gap-5 lg:gap-6 mt-12">
+          {testimonials.slice(0, 3).map((t, i) => (
             <TestimonialCard
               key={t.name}
               {...t}
               index={i}
-              featured={i === 0}
-              className={i === 0 ? 'md:col-span-2 lg:col-span-2 lg:row-span-2' : ''}
+              featured={false}
+            />
+          ))}
+        </div>
+
+        {/* Secondary row — 3 more, slightly smaller */}
+        <div className="grid md:grid-cols-3 gap-5 lg:gap-6 mt-5">
+          {testimonials.slice(3).map((t, i) => (
+            <TestimonialCard
+              key={t.name}
+              {...t}
+              index={i + 3}
+              featured={false}
             />
           ))}
         </div>

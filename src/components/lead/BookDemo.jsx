@@ -12,10 +12,10 @@ const benefits = [
 export default function BookDemo() {
   return (
     <motion.div
-      initial={{ opacity: 0, x: -30 }}
+      initial={{ opacity: 0, x: -16 }}
       whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, margin: '-50px' }}
-      transition={{ duration: 0.6 }}
+      viewport={{ once: true, amount: 0.12, margin: "0px 0px -8% 0px" }}
+      transition={{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
       className="space-y-8"
     >
       <div>

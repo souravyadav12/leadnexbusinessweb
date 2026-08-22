@@ -19,11 +19,12 @@ const sectionIds = navLinks.map((l) => l.id);
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const spyActiveId = useScrollSpy(sectionIds);
+  // 96px = navbar height — sections become active once their top crosses this threshold
+  const spyActiveId = useScrollSpy(sectionIds, 96);
   const [manualActiveId, setManualActiveId] = useState(null);
   const { prefetchSection } = useSectionReadiness('navbar');
 
-  const activeId = manualActiveId || spyActiveId;
+  const activeId = manualActiveId ?? spyActiveId;
 
   // Clear manual override when scroll spy matches or scrolls
   useEffect(() => {
@@ -37,7 +38,8 @@ export default function Navbar() {
     const onScroll = () => {
       if (!ticking) {
         requestAnimationFrame(() => {
-          setScrolled(window.scrollY > 20);
+          const isScrolled = window.scrollY > 20;
+          setScrolled((prev) => (prev !== isScrolled ? isScrolled : prev));
           ticking = false;
         });
         ticking = true;
@@ -73,8 +75,8 @@ export default function Navbar() {
       <div className={`transition-all duration-300 ${scrolled ? 'pt-3' : 'pt-5'}`}>
         <nav
           className={`pointer-events-auto mx-4 sm:mx-6 lg:mx-auto flex items-center justify-between transition-all duration-300 ${scrolled
-              ? 'max-w-4xl glass-strong rounded-full h-14 px-5 shadow-2xl shadow-black/40'
-              : 'max-w-6xl bg-transparent rounded-full h-16 px-6'
+            ? 'max-w-4xl glass-strong rounded-full h-14 px-5 shadow-2xl shadow-black/40'
+            : 'max-w-6xl bg-transparent rounded-full h-16 px-6'
             }`}
           aria-label="Main navigation"
         >
@@ -110,24 +112,36 @@ export default function Navbar() {
                   onClick={(e) => handleNavClick(e, link.id)}
                   onMouseEnter={() => handleNavHover(link.id)}
                   onFocus={() => handleNavHover(link.id)}
-                  className={`relative px-4 py-2 text-sm transition-colors duration-200 rounded-full ${isActive ? 'text-white font-medium' : 'text-text-secondary hover:text-white hover:bg-white/5'
+                  className={`relative px-4 py-2 text-sm transition-all duration-200 rounded-full group ${isActive
+                      ? 'text-white font-semibold'
+                      : 'text-text-secondary hover:text-white hover:bg-white/[0.05]'
                     }`}
                   role="menuitem"
                   aria-current={isActive ? 'true' : undefined}
                 >
+                  {/* Animated active pill background */}
                   {isActive && (
                     <motion.span
                       layoutId="navbar-active-pill"
-                      className="absolute inset-0 rounded-full bg-white/10 border border-white/15"
-                      transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                      className="absolute inset-0 rounded-full bg-accent/[0.12] border border-accent/25"
+                      transition={{ type: 'spring', stiffness: 500, damping: 38 }}
                     />
                   )}
-                  <span className="relative z-10 flex items-center gap-1">
-                    <span className="text-[10px] font-mono opacity-50 text-accent group-hover:opacity-100 transition-opacity">
+                  <span className="relative z-10 flex items-center gap-1.5">
+                    <span className={`text-[10px] font-mono transition-all duration-200 ${isActive ? 'text-accent opacity-100' : 'text-accent opacity-40 group-hover:opacity-80'
+                      }`}>
                       {link.number}
                     </span>
                     <span>{link.label}</span>
                   </span>
+                  {/* Active bottom dot indicator */}
+                  {isActive && (
+                    <motion.span
+                      layoutId="navbar-active-dot"
+                      className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-accent"
+                      transition={{ type: 'spring', stiffness: 500, damping: 38 }}
+                    />
+                  )}
                 </a>
               );
             })}

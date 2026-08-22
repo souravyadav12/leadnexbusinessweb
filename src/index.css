@@ -34,12 +34,18 @@
   --shadow-elevated: 0 12px 40px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.06);
   --shadow-glow-accent: 0 8px 30px rgba(91, 124, 250, 0.35);
   --shadow-glow-accent-lg: 0 20px 60px rgba(91, 124, 250, 0.25);
+  --shadow-glow-popular: 0 0 0 1px rgba(91, 124, 250, 0.4), 0 20px 60px rgba(91, 124, 250, 0.18);
 
   /* Easing scale — the exact curves used throughout motion/config.js,
      exposed as CSS so raw-CSS transitions (hover states, focus rings)
      move with the same character as the framer-motion animations. */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Premium redesign additions */
+  --color-surface-alt: #0f1119;
+  --color-surface-mesh: #111827;
+  --color-cyan-accent: #06B6D4;
 }
 
 * {
@@ -161,6 +167,70 @@ select:focus-visible,
 
 .animate-marquee {
   animation: marquee 32s linear infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@keyframes gradient-shift {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes dot-float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+    opacity: 0.4;
+  }
+
+  50% {
+    transform: translateY(-6px);
+    opacity: 0.8;
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2.5s infinite;
+}
+
+.gradient-text-animated {
+  background: linear-gradient(135deg, #5B7CFA 0%, #06B6D4 50%, #8B5CF6 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 4s ease infinite;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.section-alt-bg {
+  background-color: var(--color-surface-alt);
 }
 
 /* ---------------- Surfaces ---------------- */

@@ -116,10 +116,10 @@ export default function DemoSection() {
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
             style={{ rotateX: rotX, rotateY: rotY, transformPerspective: 1000 }}
-            initial={{ opacity: 0, x: 30 }}
+            initial={{ opacity: 0, x: 16 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
-            transition={{ duration: 0.6 }}
+            viewport={{ once: true, amount: 0.12, margin: "0px 0px -8% 0px" }}
+            transition={{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
             className="lg:col-span-5 w-full glass rounded-2xl border border-indigo-500/25 p-5 sm:p-6 flex flex-col justify-start relative group/content shadow-2xl shadow-indigo-950/10 will-change-transform"
           >
             {/* Local Glow */}

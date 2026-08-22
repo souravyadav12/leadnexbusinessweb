@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Shield, CreditCard, RotateCcw } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Shield, CreditCard, RotateCcw, ChevronDown } from 'lucide-react';
 import SectionTitle from '../common/SectionTitle';
 import PricingCard from './PricingCard';
 import PricingComparison from './PricingComparison';
@@ -70,9 +70,10 @@ const plans = [
 
 export default function Pricing() {
   const [yearly, setYearly] = useState(false);
+  const [showComparison, setShowComparison] = useState(false);
 
   return (
-    <section id="pricing" className="py-20 lg:py-24 relative" aria-label="Pricing">
+    <section id="pricing" className="py-20 lg:py-28 relative" aria-label="Pricing">
       <Background preset="sectionAlt" />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent pointer-events-none" aria-hidden="true" />
 
@@ -85,54 +86,47 @@ export default function Pricing() {
           subtitle="No hidden fees. No surprises. Choose the plan that fits your team and scale as you grow."
         />
 
-        {/* Toggle */}
+        {/* Billing toggle */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-12 px-4"
+          className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-14 px-4"
         >
           <span
             onClick={() => setYearly(false)}
-            className={`text-sm cursor-pointer select-none transition-colors duration-200 ${
-              !yearly ? 'text-white font-medium' : 'text-text-secondary hover:text-white'
-            }`}
+            className={`text-sm cursor-pointer select-none transition-colors duration-200 ${!yearly ? 'text-white font-semibold' : 'text-text-secondary hover:text-white'}`}
           >
             Monthly
           </span>
           <button
             onClick={() => setYearly(!yearly)}
-            className={`relative w-14 h-7 shrink-0 rounded-full transition-colors duration-300 ease-[var(--ease-out)] cursor-pointer ${
-              yearly ? 'bg-accent' : 'bg-white/10 hover:bg-white/15'
-            }`}
+            className={`relative w-14 h-7 shrink-0 rounded-full transition-colors duration-300 ease-[var(--ease-out)] cursor-pointer ${yearly ? 'bg-accent' : 'bg-white/10 hover:bg-white/15'}`}
             aria-label="Toggle annual billing"
             role="switch"
             aria-checked={yearly}
           >
-            <span
-              className={`absolute top-0.5 left-0.5 w-6 h-6 rounded-full bg-white transition-transform duration-300 ease-[var(--ease-out)] shadow-[var(--shadow-soft)] ${
-                yearly ? 'translate-x-7' : 'translate-x-0'
-              }`}
-            />
+            <span className={`absolute top-0.5 left-0.5 w-6 h-6 rounded-full bg-white transition-transform duration-300 ease-[var(--ease-out)] shadow-[var(--shadow-soft)] ${yearly ? 'translate-x-7' : 'translate-x-0'}`} />
           </button>
           <span
             onClick={() => setYearly(true)}
-            className={`text-sm cursor-pointer select-none transition-colors duration-200 ${
-              yearly ? 'text-white font-medium' : 'text-text-secondary hover:text-white'
-            }`}
+            className={`text-sm cursor-pointer select-none transition-colors duration-200 ${yearly ? 'text-white font-semibold' : 'text-text-secondary hover:text-white'}`}
           >
-            Yearly <span className="text-success text-xs font-medium">Save 20%</span>
+            Yearly{' '}
+            <span className="text-success text-xs font-medium bg-success/10 px-1.5 py-0.5 rounded-full ml-1">
+              Save 20%
+            </span>
           </span>
         </motion.div>
 
-        {/* Cards */}
-        <div className="grid md:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto">
+        {/* Cards — popular is elevated with scale-[1.03] in PricingCard */}
+        <div className="grid md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto items-center">
           {plans.map((plan, i) => (
             <PricingCard key={plan.name} {...plan} index={i} yearly={yearly} />
           ))}
         </div>
 
-        {/* Guarantees */}
+        {/* Trust guarantees */}
         <div className="flex flex-wrap justify-center gap-6 mt-12">
           {[
             { icon: Shield, text: 'Money-back guarantee' },
@@ -146,7 +140,30 @@ export default function Pricing() {
           ))}
         </div>
 
-        <PricingComparison />
+        {/* Collapsible comparison table */}
+        <div className="mt-16 border-t border-white/[0.06] pt-10">
+          <button
+            onClick={() => setShowComparison(v => !v)}
+            className="flex items-center gap-2 text-sm text-text-secondary hover:text-white transition-colors mx-auto"
+          >
+            <span>{showComparison ? 'Hide' : 'Show'} full feature comparison</span>
+            <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${showComparison ? 'rotate-180' : ''}`} />
+          </button>
+          <AnimatePresence>
+            {showComparison && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                className="overflow-hidden"
+              >
+                <PricingComparison />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
         <FAQ />
       </div>
     </section>

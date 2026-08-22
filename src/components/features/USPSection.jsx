@@ -38,9 +38,25 @@ export default function USPSection() {
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-white/5 text-sm">
+          <motion.tbody
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.12, margin: "0px 0px -8% 0px" }}
+            variants={{
+              hidden: {},
+              visible: { transition: { staggerChildren: 0.05 } }
+            }}
+            className="divide-y divide-white/5 text-sm"
+          >
             {comparisons.map((row, idx) => (
-              <tr key={idx} className="hover:bg-white/[0.02] transition-colors">
+              <motion.tr
+                key={idx}
+                variants={{
+                  hidden: { opacity: 0, y: 10 },
+                  visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } }
+                }}
+                className="hover:bg-white/[0.02] transition-colors"
+              >
                 <td className="py-4 px-6 font-medium text-white flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
                   {row.feature}
@@ -55,9 +71,9 @@ export default function USPSection() {
                     ✓ {row.leadnex}
                   </span>
                 </td>
-              </tr>
+              </motion.tr>
             ))}
-          </tbody>
+          </motion.tbody>
         </table>
       </div>
     </div>

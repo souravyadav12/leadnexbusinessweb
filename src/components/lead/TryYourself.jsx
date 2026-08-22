@@ -13,7 +13,6 @@ export default function TryYourself() {
         <SectionTitle
           index="07"
           badge="Get Started"
-          flip
           title="Start Automating"
           titleAccent="Today"
           subtitle="Book a personalized demo or start your free trial. No credit card required. Setup takes less than 5 minutes."

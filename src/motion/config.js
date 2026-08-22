@@ -12,20 +12,20 @@
  */
 export const SPRING = {
   // Default — most UI motion (reveals, layout shifts)
-  default: { type: 'spring', stiffness: 260, damping: 28, mass: 0.6 },
+  default: { type: 'spring', stiffness: 300, damping: 30, mass: 0.5 },
   // Soft — slow, ambient, embient background motion
-  soft: { type: 'spring', stiffness: 120, damping: 20, mass: 0.8 },
+  soft: { type: 'spring', stiffness: 150, damping: 22, mass: 0.7 },
   // Snappy — buttons, toggles, small interactive elements
-  snappy: { type: 'spring', stiffness: 400, damping: 30, mass: 0.5 },
-  // Bouncy — playful emphasis (badges, counters landing, pop-ins)
-  bouncy: { type: 'spring', stiffness: 420, damping: 18, mass: 0.6 },
-  // Gentle — cursor/pointer followers, parallax (smooth trailing)
-  trailing: { type: 'spring', stiffness: 150, damping: 15, mass: 0.3 },
-  // Lazy — very slow trailing, for large-radius light/spotlight effects
-  lazy: { type: 'spring', stiffness: 40, damping: 20, mass: 0.5 },
-  // Stiff — near-instant, for magnetic buttons / tilt cards
-  magnetic: { type: 'spring', stiffness: 150, damping: 12, mass: 0.3 },
-  tilt: { type: 'spring', stiffness: 220, damping: 22, mass: 0.4 },
+  snappy: { type: 'spring', stiffness: 450, damping: 32, mass: 0.4 },
+  // Bouncy — playful emphasis
+  bouncy: { type: 'spring', stiffness: 450, damping: 20, mass: 0.5 },
+  // Gentle
+  trailing: { type: 'spring', stiffness: 180, damping: 18, mass: 0.3 },
+  // Lazy
+  lazy: { type: 'spring', stiffness: 50, damping: 22, mass: 0.5 },
+  // Stiff
+  magnetic: { type: 'spring', stiffness: 180, damping: 14, mass: 0.3 },
+  tilt: { type: 'spring', stiffness: 240, damping: 24, mass: 0.4 },
 };
 
 /** Cubic-bezier curves, reserved for opacity/filter/clip-path reveals. */
@@ -35,18 +35,27 @@ export const EASE = {
 };
 
 export const DURATION = {
-  fast: 0.35,
-  base: 0.6,
-  slow: 0.8,
-  slower: 1.1,
+  fast: 0.28,
+  base: 0.38,
+  slow: 0.42,
+  slower: 0.45,
 };
 
-/** Default viewport trigger — fires once, slightly before entering view. */
-export const VIEWPORT_ONCE = { once: true, margin: '-60px' };
-export const VIEWPORT_REPEAT = { once: false, margin: '-40px', amount: 0.3 };
+/** Default viewport trigger — triggers when 12% of the content is visible, earlier than before */
+export const VIEWPORT_ONCE = {
+  once: true,
+  amount: 0.12,
+  margin: "0px 0px -8% 0px"
+};
+
+export const VIEWPORT_REPEAT = {
+  once: false,
+  amount: 0.12,
+  margin: "0px 0px -8% 0px"
+};
 
 /** Shared stagger factory so every list/grid reveal is consistent. */
-export const stagger = (staggerChildren = 0.08, delayChildren = 0) => ({
+export const stagger = (staggerChildren = 0.07, delayChildren = 0.03) => ({
   hidden: {},
   show: { transition: { staggerChildren, delayChildren } },
 });

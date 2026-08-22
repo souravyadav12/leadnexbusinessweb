@@ -27,7 +27,7 @@ export default function CTABanner() {
           </h2>
 
           <p className="text-lg text-text-secondary mb-10 max-w-2xl mx-auto">
-            Join 2,000+ companies using LeadNex AI to automate their calling operations. 
+            Join 2,000+ companies using LeadNex AI to automate their calling operations.
             Deploy in minutes, see results in hours.
           </p>
 

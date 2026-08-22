@@ -1,115 +1,49 @@
 import React from 'react';
-import SecurityCard from './SecurityCard';
 import { ShieldCheck, Lock, FileCheck, Server, Eye, KeyRound, ClipboardList, Database } from 'lucide-react';
+import { motion } from 'framer-motion';
 
-const certificationStandards = [
-  {
-    icon: ShieldCheck,
-    code: 'SOC2-II',
-    title: 'SOC 2 Type II',
-    description: 'Audited controls covering security, availability, integrity, confidentiality, and privacy.',
-    status: 'AUDITED'
-  },
-  {
-    icon: Server,
-    code: 'ISO-27001',
-    title: 'ISO 27001',
-    description: 'Certified information security management system ensuring systematic protection of company data.',
-    status: 'CERTIFIED'
-  }
-];
-
-const privacyStandards = [
-  {
-    icon: Lock,
-    code: 'GDPR-EU',
-    title: 'GDPR Compliant',
-    description: 'Privacy controls covering data minimization, erasure, consent, and EU data protection requirements.',
-    status: 'COMPLIANT'
-  },
-  {
-    icon: FileCheck,
-    code: 'HIPAA-US',
-    title: 'HIPAA Compliant',
-    description: 'Enterprise healthcare compliance with BAA agreements, PHI encryption, and audit trails for patient interactions.',
-    status: 'HIPAA READY'
-  },
-  {
-    icon: Eye,
-    code: 'CCPA-CA',
-    title: 'CCPA Compliant',
-    description: 'California Consumer Privacy Act compliance with transparent data practices and consumer rights management.',
-    status: 'COMPLIANT'
-  }
-];
-
-const controlStandards = [
-  {
-    icon: KeyRound,
-    code: 'AES-256',
-    title: 'End-to-End Encryption',
-    description: 'AES-256 encryption at rest and TLS 1.3 in transit. Zero-knowledge architecture ensures data safety.',
-    status: 'ACTIVE'
-  },
-  {
-    icon: ClipboardList,
-    code: 'LOG-AUDIT',
-    title: 'Audit Logs',
-    description: 'Comprehensive audit logging for every action, API call, and data access. Full traceability for compliance.',
-    status: 'ENABLED'
-  },
-  {
-    icon: Database,
-    code: 'INFRA-HA',
-    title: 'Secure Infrastructure',
-    description: 'Deployed on AWS and GCP with multi-region redundancy, automated backups, and 99.99% uptime guarantee.',
-    status: 'ACTIVE'
-  }
+const badges = [
+  { icon: ShieldCheck, label: 'SOC 2 Type II', color: 'text-accent' },
+  { icon: Lock, label: 'GDPR', color: 'text-accent' },
+  { icon: FileCheck, label: 'HIPAA', color: 'text-accent' },
+  { icon: Server, label: 'ISO 27001', color: 'text-accent' },
+  { icon: Eye, label: 'CCPA', color: 'text-accent' },
+  { icon: KeyRound, label: 'AES-256', color: 'text-accent' },
+  { icon: ClipboardList, label: 'Audit Logs', color: 'text-accent' },
+  { icon: Database, label: '99.99% Uptime', color: 'text-accent' },
 ];
 
 export default function ComplianceGrid() {
   return (
-    <div className="max-w-7xl mx-auto space-y-12 mt-12 sm:mt-16">
-      
-      {/* 1. Certifications Group */}
-      <div>
-        <div className="flex items-center gap-2 mb-4 border-b border-white/5 pb-2">
-          <span className="w-1 h-1 rounded-full bg-accent" />
-          <h3 className="text-xs font-mono uppercase tracking-wider text-text-secondary font-bold">Certifications & Frameworks</h3>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
-          {certificationStandards.map((s, idx) => (
-            <SecurityCard key={s.title} {...s} index={idx} />
-          ))}
-        </div>
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.12, margin: "0px 0px -8% 0px" }}
+      variants={{
+        hidden: {},
+        visible: { transition: { staggerChildren: 0.04, delayChildren: 0.02 } }
+      }}
+      className="mt-10"
+    >
+      <p className="text-xs font-mono uppercase tracking-wider text-text-secondary mb-5">
+        Certifications &amp; Controls
+      </p>
+      <div className="flex flex-wrap gap-3">
+        {badges.map(({ icon: Icon, label }) => (
+          <motion.div
+            key={label}
+            variants={{
+              hidden: { opacity: 0, y: 10 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.32, ease: [0.16, 1, 0.3, 1] } }
+            }}
+            whileHover={{ y: -2, scale: 1.02, transition: { duration: 0.2 } }}
+            className="flex items-center gap-2 px-3.5 py-2 rounded-full border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] hover:border-accent/30 transition-all duration-200 group"
+          >
+            <Icon className="w-3.5 h-3.5 text-accent/70 group-hover:text-accent transition-colors" />
+            <span className="text-xs font-semibold text-text-secondary group-hover:text-white transition-colors">{label}</span>
+          </motion.div>
+        ))}
       </div>
-
-      {/* 2. Privacy Group */}
-      <div>
-        <div className="flex items-center gap-2 mb-4 border-b border-white/5 pb-2">
-          <span className="w-1 h-1 rounded-full bg-accent" />
-          <h3 className="text-xs font-mono uppercase tracking-wider text-text-secondary font-bold">Privacy & Regulatory Compliance</h3>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
-          {privacyStandards.map((s, idx) => (
-            <SecurityCard key={s.title} {...s} index={idx + 2} />
-          ))}
-        </div>
-      </div>
-
-      {/* 3. Controls Group */}
-      <div>
-        <div className="flex items-center gap-2 mb-4 border-b border-white/5 pb-2">
-          <span className="w-1 h-1 rounded-full bg-accent" />
-          <h3 className="text-xs font-mono uppercase tracking-wider text-text-secondary font-bold">Security Controls & Protection</h3>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
-          {controlStandards.map((s, idx) => (
-            <SecurityCard key={s.title} {...s} index={idx + 5} />
-          ))}
-        </div>
-      </div>
-
-    </div>
+    </motion.div>
   );
 }

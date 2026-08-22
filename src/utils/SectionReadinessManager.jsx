@@ -88,11 +88,9 @@ export function SectionObserver({ id, children, prefetchDistance = '600px', clas
     };
   }, [elementRef, id, setSectionStatus, status, prefetchDistance]);
 
-  const isVisible = status === SECTION_STATES.ACTIVE || status === SECTION_STATES.READY || status === SECTION_STATES.PRELOADING;
-
   return (
     <section ref={setElementRef} id={id} className={className}>
-      {isVisible ? children : <div className="min-h-[400px] w-full" aria-hidden="true" />}
+      {children}
     </section>
   );
 }

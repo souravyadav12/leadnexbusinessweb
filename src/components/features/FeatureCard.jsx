@@ -12,10 +12,10 @@ export default function FeatureCard({ badge, title, description, children, accen
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.5 }}
+      initial={{ opacity: 0, y: 14, scale: 0.985 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, amount: 0.12, margin: "0px 0px -8% 0px" }}
+      transition={{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
       className={`h-full w-full p-6 sm:p-8 rounded-2xl bg-[#0b0d14]/80 backdrop-blur-xl border border-white/10 ${accentGlows[accentColor]} transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden`}
     >
       {/* Background Micro Glow */}
