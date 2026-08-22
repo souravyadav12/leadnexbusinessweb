@@ -1,57 +1,64 @@
+import React from 'react';
 import { motion } from 'framer-motion';
 
-const comparisons = [
-  'Available 24/7/365',
-  'Zero missed calls',
-  'Instant lead qualification',
-  'Handles 10,000+ concurrent calls',
-  'Consistent brand voice',
-  'Sub-second response time',
-  'Automatic CRM updates',
-  'Scales without hiring',
-  'Multi-language support',
-  'Cost per call under $0.10',
-];
-
-/**
- * Replaces the generic 3-column checkmark/X comparison table (classic
- * Bootstrap pricing-table iconography) with an editorial ledger: each row
- * is a single line with the "traditional" state rendered as a struck-through
- * ghost and the AI state as a lit accent mark — read top to bottom like a
- * spec sheet, not scanned left-to-right like a feature matrix.
- */
 export default function USPSection() {
+  const comparisons = [
+    { feature: 'Available 24/7/365 without shift gaps', traditional: 'No (High Overtime Cost)', leadnex: 'Yes (100% Uptime)' },
+    { feature: 'Concurrent Call Scaling Capacity', traditional: 'Limited to Seat Count', leadnex: 'Unlimited (10,000+ Calls)' },
+    { feature: 'Average Response Delay (Latency)', traditional: '3 - 15 Seconds', leadnex: 'Sub-300ms (Instant)' },
+    { feature: 'Automatic CRM Logging & Transcript Sync', traditional: 'Manual (Prone to Error)', leadnex: 'Instant Real-time Sync' },
+    { feature: 'Training & Onboarding Time', traditional: '3 - 6 Weeks', leadnex: 'Instant (Upload Playbook)' },
+    { feature: 'Average Cost Per Completed Call', traditional: '$3.50 - $6.00 / call', leadnex: '< $0.10 / call' },
+  ];
+
   return (
-    <div className="mt-20 lg:mt-28 max-w-7xl mx-auto">
-      <div className="flex items-baseline justify-between mb-8 gap-6">
-        <span className="tag-bracket text-[11px] text-accent">Why LeadNex AI</span>
-        <div className="flex items-center gap-6 text-[11px] text-mono-label">
-          <span className="text-text-tertiary">Traditional</span>
-          <span className="font-editorial text-base text-accent normal-case tracking-normal">vs</span>
-          <span className="text-accent">LeadNex AI</span>
-        </div>
+    <div className="w-full">
+      {/* Section Sub-Header */}
+      <div className="text-center max-w-3xl mx-auto mb-12">
+        <span className="text-xs font-mono text-indigo-400 uppercase tracking-widest">
+          [ WHY ENTERPRISES SWITCH ]
+        </span>
+        <h3 className="text-3xl sm:text-4xl font-extrabold text-white mt-2">
+          Traditional Call Centers vs <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">LeadNex AI</span>
+        </h3>
+        <p className="text-sm text-gray-400 mt-3">
+          See why modern sales teams are replacing traditional offshore call centers with autonomous AI agents.
+        </p>
       </div>
 
-      <div className="border-t border-white/[0.07]">
-        {comparisons.map((item, i) => (
-          <motion.div
-            key={item}
-            initial={{ opacity: 0, x: -12 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-30px' }}
-            transition={{ duration: 0.5, delay: (i % 10) * 0.04 }}
-            className="group flex items-center justify-between gap-6 py-4 border-b border-white/[0.05] hover:border-accent/20 transition-colors"
-          >
-            <span className="text-sm sm:text-base text-white/90">{item}</span>
-            <div className="flex items-center gap-6 shrink-0">
-              <span className="hidden sm:block w-6 h-px bg-white/15" aria-hidden="true" />
-              <span
-                className="w-1.5 h-1.5 rounded-full bg-accent shadow-[0_0_10px_rgba(91,124,250,0.7)] group-hover:scale-125 transition-transform"
-                aria-hidden="true"
-              />
-            </div>
-          </motion.div>
-        ))}
+      {/* Interactive Glass Table Matrix */}
+      <div className="w-full overflow-x-auto rounded-2xl border border-white/10 bg-[#0a0c12]/90 backdrop-blur-xl shadow-2xl">
+        <table className="w-full text-left border-collapse min-w-[700px]">
+          <thead>
+            <tr className="border-b border-white/10 bg-white/[0.02] text-xs font-mono uppercase tracking-wider text-gray-400">
+              <th className="py-5 px-6 font-semibold">Capability / Metric</th>
+              <th className="py-5 px-6 font-semibold text-gray-500">Traditional Call Centers</th>
+              <th className="py-5 px-6 font-semibold text-indigo-400 bg-indigo-500/10 border-x border-indigo-500/20">
+                LeadNex AI Agent
+              </th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-white/5 text-sm">
+            {comparisons.map((row, idx) => (
+              <tr key={idx} className="hover:bg-white/[0.02] transition-colors">
+                <td className="py-4 px-6 font-medium text-white flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
+                  {row.feature}
+                </td>
+                <td className="py-4 px-6 text-gray-400 font-mono text-xs">
+                  <span className="inline-flex items-center gap-1.5 text-rose-400/90 bg-rose-500/10 px-2.5 py-1 rounded border border-rose-500/20">
+                    ✕ {row.traditional}
+                  </span>
+                </td>
+                <td className="py-4 px-6 font-mono text-xs bg-indigo-500/[0.03] border-x border-indigo-500/10">
+                  <span className="inline-flex items-center gap-1.5 text-emerald-300 bg-emerald-500/10 px-3 py-1 rounded-md border border-emerald-500/30 font-semibold shadow-sm">
+                    ✓ {row.leadnex}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

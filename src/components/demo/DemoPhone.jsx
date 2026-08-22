@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Phone, PhoneOff, Mic, MicOff, Sparkles } from 'lucide-react';
+import { Phone, PhoneOff, Mic, MicOff, Sparkles, ChevronDown } from 'lucide-react';
 import DemoWaveform from './DemoWaveform';
 import DemoConversation from './DemoConversation';
 import DemoInput from './DemoInput';
@@ -25,11 +25,19 @@ const scenarios = {
   },
 };
 
+const voiceModels = [
+  { id: 'sarah', name: 'Sarah (Support Voice)' },
+  { id: 'marcus', name: 'Marcus (Sales Voice)' },
+  { id: 'rachel', name: 'Rachel (Executive Voice)' }
+];
+
 const scenarioKeys = Object.keys(scenarios);
 
 export default function DemoPhone() {
   const [activeScenario, setActiveScenario] = useState('sales');
+  const [voiceModel, setVoiceModel] = useState('sarah');
   const [isMuted, setIsMuted] = useState(false);
+  
   const scenario = scenarios[activeScenario];
   const sim = useCallSimulator();
   const scrollRef = useRef(null);
@@ -57,18 +65,18 @@ export default function DemoPhone() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
       transition={{ duration: 0.6 }}
-      className="w-full max-w-md mx-auto"
+      className="w-full max-w-2xl mx-auto lg:mr-0"
     >
       {/* Scenario tabs */}
-      <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-4 justify-center">
+      <div className="flex overflow-x-auto md:flex-wrap items-center gap-2 mb-4 pb-1.5 md:pb-0 justify-start md:justify-center w-full scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden px-1 md:px-0">
         {scenarioKeys.map((key) => (
           <button
             key={key}
             onClick={() => switchScenario(key)}
-            className={`px-2.5 sm:px-3 py-1.5 text-[11px] sm:text-xs font-medium rounded-lg transition-all cursor-pointer ${
+            className={`px-3 py-1.5 text-[11px] sm:text-xs font-mono font-semibold rounded-lg transition-all cursor-pointer shrink-0 border ${
               activeScenario === key
-                ? 'bg-accent text-white'
-                : 'bg-white/5 text-text-secondary hover:text-white hover:bg-white/10'
+                ? 'bg-accent text-white border-accent/40 shadow-lg shadow-accent/15'
+                : 'bg-white/5 text-text-secondary border-white/[0.04] hover:text-white hover:bg-white/10'
             }`}
           >
             {scenarios[key].title}
@@ -76,74 +84,110 @@ export default function DemoPhone() {
         ))}
       </div>
 
-      {/* Phone UI */}
-      <div className="glass rounded-2xl sm:rounded-3xl overflow-hidden">
-        {/* Top bar */}
-        <div className="px-4 sm:px-6 py-3.5 sm:py-4 border-b border-white/[0.06] flex items-center justify-between">
+      {/* Console Frame */}
+      <div className="glass rounded-2xl border border-indigo-500/20 overflow-hidden shadow-2xl shadow-indigo-950/20">
+        {/* Top Control Bar */}
+        <div className="px-4 sm:px-6 py-4 border-b border-white/[0.06] flex flex-wrap items-center justify-between gap-4">
           <div>
-            <div className="text-xs sm:text-sm font-semibold text-white">{scenario.title}</div>
-            <div className="text-[10px] sm:text-xs text-text-secondary flex items-center gap-1.5">
-              {sim.status === 'idle' && 'Ready to start'}
-              {sim.status === 'live' && (
-                <>
-                  <Sparkles className="w-3 h-3 text-accent" /> Live · {sim.formattedTime}
-                </>
-              )}
-              {sim.status === 'ended' && 'Call ended'}
+            <div className="text-xs font-mono text-text-secondary uppercase tracking-wider mb-1">Scenario</div>
+            <div className="text-sm font-bold text-white flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+              {scenario.title}
             </div>
           </div>
-          <div className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full ${isLive ? 'bg-success animate-pulse' : 'bg-text-secondary/30'}`} />
+
+          {/* Voice Model Dropdown */}
+          <div className="flex items-center gap-2 bg-white/[0.03] border border-white/[0.06] rounded-xl px-3 py-1.5">
+            <span className="text-[10px] font-mono text-text-secondary uppercase tracking-wider shrink-0">Model:</span>
+            <div className="relative flex items-center">
+              <select
+                value={voiceModel}
+                onChange={(e) => setVoiceModel(e.target.value)}
+                className="bg-transparent text-xs font-semibold text-white/95 focus:outline-none pr-5 cursor-pointer appearance-none"
+              >
+                {voiceModels.map((m) => (
+                  <option key={m.id} value={m.id} className="bg-bg-secondary text-white">
+                    {m.name}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="w-3.5 h-3.5 text-text-secondary absolute right-0 pointer-events-none" />
+            </div>
+          </div>
         </div>
 
-        {/* Content */}
+        {/* WebRTC & Sentiment Status Tracker Bar */}
+        <div className="px-4 sm:px-6 py-2.5 bg-black/40 border-b border-white/[0.06] flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
+          <div className="flex items-center gap-2">
+            <span className={`w-2 h-2 rounded-full ${isLive ? 'bg-success animate-ping' : 'bg-white/10'}`} />
+            <span className="text-text-secondary text-[10px]">
+              RTC Network: {isLive ? <span className="text-success font-semibold">CONNECTED · 210ms latency</span> : 'IDLE'}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-1.5">
+            <span className="text-text-secondary text-[10px]">
+              Sentiment Analysis: <span className={isLive ? 'text-accent font-bold' : 'text-text-tertiary'}>
+                {isLive ? (sim.messages.length > 1 ? 'Intent: High Interest (94%)' : 'Listening…') : 'STANDBY'}
+              </span>
+            </span>
+          </div>
+        </div>
+
+        {/* Console Interactive Content */}
         <div className="p-4 sm:p-6">
-          {/* Waveform */}
-          <div className="mb-4">
+          {/* Waveform Visualization area */}
+          <div className="mb-4 bg-black/35 rounded-xl p-3.5 border border-white/[0.04] flex flex-col items-center justify-center min-h-[68px]">
+            <span className="text-[9px] font-mono text-text-tertiary mb-1.5 uppercase tracking-widest">
+              Live WebRTC Audio Channel
+            </span>
             <DemoWaveform active={isLive && !sim.isThinking} />
           </div>
 
-          {/* Conversation */}
+          {/* Conversation Feed */}
           <DemoConversation messages={sim.messages} isThinking={sim.isThinking} scrollRef={scrollRef} />
 
-          {/* Live text input — talk to the simulated agent */}
+          {/* Prompt Buttons / Live Text input */}
           <div className="mt-4">
             <DemoInput onSend={sim.sendUserMessage} disabled={!isLive} />
           </div>
         </div>
 
-        {/* Controls */}
-        <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-white/[0.06] flex items-center justify-center gap-3 sm:gap-4">
+        {/* Audio Console Bottom Buttons */}
+        <div className="px-4 sm:px-6 py-4 border-t border-white/[0.06] flex items-center justify-center gap-4 bg-black/20">
           <button
             onClick={() => setIsMuted(!isMuted)}
-            className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all cursor-pointer shrink-0 ${
-              isMuted ? 'bg-danger/20 text-danger' : 'bg-white/5 text-text-secondary hover:bg-white/10'
+            className={`w-11 h-11 rounded-full flex items-center justify-center transition-all cursor-pointer shrink-0 border ${
+              isMuted 
+                ? 'bg-danger/20 text-danger border-danger/30 shadow-lg shadow-danger/5' 
+                : 'bg-white/5 text-text-secondary border-white/[0.06] hover:bg-white/10'
             }`}
             aria-label={isMuted ? 'Unmute' : 'Mute'}
           >
-            {isMuted ? <MicOff className="w-4 h-4 sm:w-5 sm:h-5" /> : <Mic className="w-4 h-4 sm:w-5 sm:h-5" />}
+            {isMuted ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
           </button>
 
           {!isLive ? (
             <button
               onClick={startCall}
-              className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-r from-accent to-accent-secondary flex items-center justify-center text-white hover:shadow-lg hover:shadow-accent/30 transition-all cursor-pointer shrink-0"
+              className="w-14 h-14 rounded-full bg-gradient-to-r from-accent to-accent-secondary flex items-center justify-center text-white hover:shadow-lg hover:shadow-accent/30 transition-all cursor-pointer shrink-0 shadow-lg shadow-accent/15 border border-accent/20"
               aria-label="Start call"
             >
-              <Phone className="w-5 h-5 sm:w-6 sm:h-6" />
+              <Phone className="w-5 h-5 text-white" />
             </button>
           ) : (
             <button
               onClick={sim.end}
-              className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-danger flex items-center justify-center text-white hover:bg-danger/80 transition-all cursor-pointer shrink-0"
+              className="w-14 h-14 rounded-full bg-danger flex items-center justify-center text-white hover:bg-danger/80 transition-all cursor-pointer shrink-0 shadow-lg shadow-danger/15 border border-danger/20"
               aria-label="End call"
             >
-              <PhoneOff className="w-5 h-5 sm:w-6 sm:h-6" />
+              <PhoneOff className="w-5 h-5 text-white" />
             </button>
           )}
 
           <button
             onClick={sim.reset}
-            className="px-3.5 sm:px-4 h-10 sm:h-12 rounded-full bg-white/5 text-text-secondary text-xs font-medium flex items-center justify-center hover:bg-white/10 hover:text-white transition-all cursor-pointer shrink-0"
+            className="px-4 h-11 rounded-full bg-white/5 border border-white/[0.06] text-text-secondary text-xs font-mono font-semibold flex items-center justify-center hover:bg-white/10 hover:text-white transition-all cursor-pointer shrink-0"
           >
             Reset
           </button>

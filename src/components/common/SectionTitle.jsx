@@ -16,6 +16,7 @@ export default function SectionTitle({
   titleAccent,
   subtitle,
   flip = false,
+  className,
 }) {
   const numeral = (
     <motion.div
@@ -56,7 +57,7 @@ export default function SectionTitle({
   );
 
   return (
-    <div className="mb-14 lg:mb-20 flex items-start gap-6 lg:gap-10">
+    <div className={cn("mb-14 lg:mb-20 flex items-start gap-6 lg:gap-10", className)}>
       {flip ? (
         <>
           {copy}

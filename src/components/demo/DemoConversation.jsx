@@ -6,7 +6,7 @@ export default function DemoConversation({ messages, visibleCount, isThinking, s
   return (
     <div
       ref={scrollRef}
-      className="space-y-3 min-h-[200px] max-h-[280px] overflow-y-auto px-1 scrollbar-thin"
+      className="space-y-3 min-h-[160px] max-h-[220px] overflow-y-auto px-1 scrollbar-thin"
       aria-live="polite"
     >
       <AnimatePresence mode="popLayout">
